@@ -1,4 +1,6 @@
-# iHuman
+# iHuman: Instant Animatable Digital Humans From Monocular Videos [ECCV 2024]
+
+This is official implementation of the paper: "iHuman: Instant Animatable Digital Humans From Monocular Videos".
 
 ## Prerequisites
 
