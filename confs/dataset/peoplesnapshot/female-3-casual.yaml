@@ -1,0 +1,33 @@
+_target_: animatableGaussian.dataset.mmdataset.MMPeopleSnapshotDataModule
+name: female-3-casual
+num_workers: ${num_workers}
+gender: male #female
+subject: female-3-casual
+num_players: 1
+opt:
+  dataroot: ../../data/people_snapshot/${dataset.subject}
+  max_freq: ${max_freq}
+  camera:
+    focal_length_x: 2664.22975
+    focal_length_y: 2664.69277
+    camera_center_x: 511.780554
+    camera_center_y: 567.125429
+#    camera_center_x: 540
+#    camera_center_y: 540
+    width: 1080
+    height: 1080
+  train:
+    start: 0
+    end: 445
+    skip: 4
+    downscale: 2
+  val:
+    start: 446
+    end: 446
+    skip: 4
+    downscale: 2
+  test:
+    start: 446
+    end: 647
+    skip: 4
+    downscale: 2

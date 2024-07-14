@@ -1,0 +1,12 @@
+.vscode
+__pycache__/
+build/
+outputs
+data/
+*.egg-info/
+.idea/
+experiment/
+v2
+.DS_Store
+experiments/*.txt
+animatableGaussian/dataset/smplx/
