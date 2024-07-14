@@ -2,6 +2,8 @@
 
 This is official implementation of the paper: "iHuman: Instant Animatable Digital Humans From Monocular Videos".
 
+Learn more on our project page: [iHuman](https://pramishp.github.io/iHuman/index.html) 
+
 ## Prerequisites
 
 * Cuda 11.8
@@ -23,9 +25,9 @@ bash ./install.sh
 
 ### Step 1: Download Dataset
 a. download dataset from this link https://drive.google.com/drive/folders/11h_uRhuMALHjmQKu-FIrpGi0kv5_ZC6u?usp=sharing
+<br>
 b. place it in {root}/data/people_snapshot/
 
-This file is obtained 
 ### Step 2: Download Models
 a. Download model from this link: (pending because of license issue)
 

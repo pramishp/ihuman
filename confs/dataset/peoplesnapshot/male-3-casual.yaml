@@ -5,7 +5,7 @@ gender: male
 subject: male-3-casual
 num_players: 1
 opt:
-  dataroot: ../../peoplesnapshot_dataset/male-3-casual/
+  dataroot: ../../data/peoplesnapshot/male-3-casual/
   max_freq: ${max_freq}
   camera:
       focal_length_x: 2664.22975
