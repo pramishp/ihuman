@@ -24,7 +24,7 @@ bash ./install.sh
 ## Running the code
 
 ### Step 1: Download Dataset
-a. download dataset from this link https://drive.google.com/drive/folders/11h_uRhuMALHjmQKu-FIrpGi0kv5_ZC6u?usp=sharing
+a. download dataset from this link https://drive.google.com/file/d/1qwM1jdabiJFmEGywuYowKD0-nC2-rWVe/view?usp=share_link
 <br>
 b. place it in {root}/data/people_snapshot/
 
