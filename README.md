@@ -29,13 +29,38 @@ a. download dataset from this link https://drive.google.com/file/d/1qwM1jdabiJFm
 b. place it in {root}/data/people_snapshot/
 
 ### Step 2: Download Models
-a. Download model from this link: (pending because of license issue)
+a. Download the SMPL v1.1 `SMPL_python_v.1.1.0.zip` model from the [SMPL official website](https://smpl.is.tue.mpg.de/download.php) and move and rename `SMPL_python_v.1.1.0/smpl/models/*.pkl` to `PROJECT_ROOT/data/smplx_models/smpl/`.
 
-[//]: # (https://drive.google.com/file/d/17OdyNkfdFKFqBnmFMZtmT9B-6AXKAZeG/view?usp=share_link)
+After this the project folder should look like this:
+```
+PROJECT_ROOT/data/smpl_model
+    ├── SMPL_FEMALE.pkl
+    ├── SMPL_MALE.pkl
+    ├── SMPL_NEUTRAL.pkl
+
+
+```
+
+b. Download the files from this drive link (https://drive.google.com/file/d/17OdyNkfdFKFqBnmFMZtmT9B-6AXKAZeG/view?usp=share_link) and place them in `PROJECT_ROOT/data/smpl/small/`.
+
+
+After this the project folder should look like this:
+```
+PROJECT_ROOT/data/smpl/small/
+    ├── J regressor.txt
+    ├── joint locations.txt
+    ├── kintree table.txt
+    ├── mesh2smpl_idx.txt
+    ├── triangles.txt
+    ├── uv_coords.txt
+    ├── uv_map2face.txt
+    ├── vertices.txt
+    ├── weights.txt
+
+```
+
 <br>
-b. unzip and place it in {root}/data/smpl/small/*
 
-*Note: The License of this model belongs to the SMPL ...*
 
 ### Step 3:
 4. python train.py
