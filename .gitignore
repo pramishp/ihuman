@@ -10,3 +10,4 @@ v2
 .DS_Store
 experiments/*.txt
 animatableGaussian/dataset/smplx/
+submodules/
