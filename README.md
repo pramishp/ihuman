@@ -67,6 +67,19 @@ PROJECT_ROOT/data/smpl/small/
 
 You can modify the training parameters in the `conf/mmpeoplesnapshot_fine.yaml` file.
 
+### Step 4: Animate the rendered model
+a. Download the files from this drive link (https://drive.google.com/drive/folders/1XUpygOfdTSx4pKflAzbu7CY7fLTSNAe8?usp=sharing) and place them in `PROJECT_ROOT/data/animation`.
+
+After this the project folder should look like this:
+```
+PROJECT_ROOT/data/animation
+    ├── motion
+    ├── camera.pkl
+
+```
+
+b. python animate.py
+
 ## Acknowledgement
 
 Our code is based on several interesting and helpful projects:
