@@ -18,6 +18,7 @@ from animatableGaussian.utils import ssim, l1_loss, GMoF, SavePly, save_image
 
 from diff_gaussian_rasterization import GaussianRasterizationSettings, GaussianRasterizer
 
+headless=True
 
 class EvaluatorRecon(nn.Module):
     """adapted from https://github.com/JanaldoChen/Anim-NeRF/blob/main/models/evaluator.py"""
@@ -505,16 +506,16 @@ class NeRFModel(pl.LightningModule):
         rasterized_rgbs = torch.stack(rasterized_rgbs)
         b_vertices = torch.stack(b_vertices)
         b_normals = torch.stack(b_normals)
+        if not headless:
+            from animatableGaussian.vis_utils import create_side_by_side_images
+            gt_rgb_vs_rasterized_rgb = create_side_by_side_images(gt_images=gt_images, pred_images=rasterized_rgbs)
 
-        from animatableGaussian.vis_utils import create_side_by_side_images
-        gt_rgb_vs_rasterized_rgb = create_side_by_side_images(gt_images=gt_images, pred_images=rasterized_rgbs)
+            save_image(gt_rgb_vs_rasterized_rgb * 255,
+                       path=f"val/{self.current_epoch}/rasterized_{batch_idx}.png")
 
-        save_image(gt_rgb_vs_rasterized_rgb * 255,
-                   path=f"val/{self.current_epoch}/rasterized_{batch_idx}.png")
-
-        gt_normal_vs_rasterized_normal = create_side_by_side_images(gt_images=gt_normals, pred_images=b_normals)
-        save_image(gt_normal_vs_rasterized_normal * 255,
-                   path=f"val/{self.current_epoch}/normal_{batch_idx}.png")
+            gt_normal_vs_rasterized_normal = create_side_by_side_images(gt_images=gt_normals, pred_images=b_normals)
+            save_image(gt_normal_vs_rasterized_normal * 255,
+                       path=f"val/{self.current_epoch}/normal_{batch_idx}.png")
 
         ## ===================================================
 
@@ -572,85 +573,87 @@ class NeRFModel(pl.LightningModule):
         ## ========================================== ###
 
         # ==================== render model and image ===============
-        from animatableGaussian.vis_utils import render_model_to_image
+        if not headless:
+            from animatableGaussian.vis_utils import render_model_to_image
 
-        model_image_overlaps = []
-        for i, img_path in enumerate(batch['img_path']):
-            model_img_overlap = render_model_to_image(b_vertices[i].detach().cpu().unsqueeze(0).numpy(),
-                                                      camera,
-                                                      [img_path],
-                                                      save_path=None)
-            model_image_overlaps.append(torch.from_numpy(model_img_overlap))
+            model_image_overlaps = []
+            for i, img_path in enumerate(batch['img_path']):
+                model_img_overlap = render_model_to_image(b_vertices[i].detach().cpu().unsqueeze(0).numpy(),
+                                                        camera,
+                                                        [img_path],
+                                                        save_path=None)
+                model_image_overlaps.append(torch.from_numpy(model_img_overlap))
 
-        model_image_overlaps = torch.stack(model_image_overlaps).permute(0, 3, 1, 2)
+            model_image_overlaps = torch.stack(model_image_overlaps).permute(0, 3, 1, 2)
 
-        from animatableGaussian.vis_utils import make_grid
-        grid_model_image_overlap = make_grid(model_image_overlaps)
-        save_image(grid_model_image_overlap, f'val/{self.current_epoch}/model_over_rgb_{batch_idx}.png')
+            from animatableGaussian.vis_utils import make_grid
+            grid_model_image_overlap = make_grid(model_image_overlaps)
+            save_image(grid_model_image_overlap, f'val/{self.current_epoch}/model_over_rgb_{batch_idx}.png')
 
         # =====
         # model front side
-        from animatableGaussian.vis_utils import render_model_front_n_side
-        front_side_model_views = []
-        for i, img_path in enumerate(batch['img_path']):
-            front_side_model_view = render_model_front_n_side(b_vertices[i].detach().cpu().unsqueeze(0).numpy(),
-                                                              camera)
-            front_side_model_views.append(torch.from_numpy(front_side_model_view))
+        if not headless:
+            from animatableGaussian.vis_utils import render_model_front_n_side
+            front_side_model_views = []
+            for i, img_path in enumerate(batch['img_path']):
+                front_side_model_view = render_model_front_n_side(b_vertices[i].detach().cpu().unsqueeze(0).numpy(),
+                                                                camera)
+                front_side_model_views.append(torch.from_numpy(front_side_model_view))
 
-        front_side_model_views = torch.stack(front_side_model_views).permute(0, 3, 1, 2)
+            front_side_model_views = torch.stack(front_side_model_views).permute(0, 3, 1, 2)
 
-        from animatableGaussian.vis_utils import make_grid
-        grid_front_side = make_grid(front_side_model_views)
-        save_image(grid_front_side, f'val/{self.current_epoch}/front_side_view_model_{batch_idx}.png')
+            from animatableGaussian.vis_utils import make_grid
+            grid_front_side = make_grid(front_side_model_views)
+            save_image(grid_front_side, f'val/{self.current_epoch}/front_side_view_model_{batch_idx}.png')
 
-        # log to tensorflow
-        tensorboard = self.logger.experiment
-        if tensorboard:
+            # log to tensorflow
+            tensorboard = self.logger.experiment
+            if tensorboard:
 
-            tensorboard.add_image(f'rgb_reconstructed_{batch_idx}',
-                                  gt_rgb_vs_rasterized_rgb,
-                                  self.current_epoch, dataformats='HWC')
+                tensorboard.add_image(f'rgb_reconstructed_{batch_idx}',
+                                    gt_rgb_vs_rasterized_rgb,
+                                    self.current_epoch, dataformats='HWC')
 
-            # if 'pose_2d' in batch:
-            #     tensorboard.add_image(f'pose_{batch_idx}',
-            #                           pose_image_grid / 255.0,
-            #                           self.current_epoch, dataformats='HWC')
+                # if 'pose_2d' in batch:
+                #     tensorboard.add_image(f'pose_{batch_idx}',
+                #                           pose_image_grid / 255.0,
+                #                           self.current_epoch, dataformats='HWC')
 
-            tensorboard.add_image(f'model_img_overlap_{batch_idx}',
-                                  grid_model_image_overlap / 255.0,
-                                  self.current_epoch, dataformats='HWC')
+                tensorboard.add_image(f'model_img_overlap_{batch_idx}',
+                                    grid_model_image_overlap / 255.0,
+                                    self.current_epoch, dataformats='HWC')
 
-            tensorboard.add_image(f'model_front_side_{batch_idx}',
-                                  grid_front_side / 255.0,
-                                  self.current_epoch, dataformats='HWC')
+                tensorboard.add_image(f'model_front_side_{batch_idx}',
+                                    grid_front_side / 255.0,
+                                    self.current_epoch, dataformats='HWC')
 
-            tensorboard.add_image(f'normal_{batch_idx}', gt_normal_vs_rasterized_normal, self.current_epoch,
-                                  dataformats="HWC")
+                tensorboard.add_image(f'normal_{batch_idx}', gt_normal_vs_rasterized_normal, self.current_epoch,
+                                    dataformats="HWC")
 
-            # mesh visualization
-            camera_config = {'cls': 'PerspectiveCamera'}
-            verts = b_vertices.cpu().clone()
-            verts[:, :, 1] *= -1
-            verts -= verts.mean(1).unsqueeze(1)
+                # mesh visualization
+                camera_config = {'cls': 'PerspectiveCamera'}
+                verts = b_vertices.cpu().clone()
+                verts[:, :, 1] *= -1
+                verts -= verts.mean(1).unsqueeze(1)
 
-            faces = self.model.faces[None, ...]
+                faces = self.model.faces[None, ...]
 
-            pc = verts.clone()
+                pc = verts.clone()
 
-            # pred_gt_verts = verts.unsqueeze(0)
-            # append GT verts
-            if self.cal_test_metrics and 'gt_vertices' in batch.keys():
-                gt_verts = batch['gt_vertices'].detach().cpu()
-                gt_verts -= gt_verts.mean(1).unsqueeze(1)
-                gt_verts[:, :, 1] *= -1
-                gt_verts[:, :, 0] += 1
-                pc = torch.hstack([verts, gt_verts])
+                # pred_gt_verts = verts.unsqueeze(0)
+                # append GT verts
+                if self.cal_test_metrics and 'gt_vertices' in batch.keys():
+                    gt_verts = batch['gt_vertices'].detach().cpu()
+                    gt_verts -= gt_verts.mean(1).unsqueeze(1)
+                    gt_verts[:, :, 1] *= -1
+                    gt_verts[:, :, 0] += 1
+                    pc = torch.hstack([verts, gt_verts])
 
-            tensorboard.add_mesh(f'reconstructed_pc_{batch_idx}',
-                                 vertices=pc,
-                                 # faces=faces,
-                                 config_dict={"camera": camera_config},
-                                 global_step=self.current_epoch)
+                tensorboard.add_mesh(f'reconstructed_pc_{batch_idx}',
+                                    vertices=pc,
+                                    # faces=faces,
+                                    config_dict={"camera": camera_config},
+                                    global_step=self.current_epoch)
 
     @torch.no_grad()
     def test_step(self, batch, batch_idx, *args, **kwargs):
