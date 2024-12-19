@@ -1,4 +1,4 @@
-name: cloudspace
+name: ihuman
 channels:
   - pytorch
   - nvidia
@@ -329,4 +329,4 @@ dependencies:
       - yacs==0.1.8
       - yarl==1.9.4
       - zipp==3.18.1
-prefix: /home/zeus/miniconda3/envs/cloudspace
+prefix: /home/zeus/miniconda3/envs/ihuman

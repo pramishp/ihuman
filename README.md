@@ -6,7 +6,7 @@ Learn more on our project page: [iHuman](https://pramishp.github.io/iHuman/index
 
 ## Prerequisites
 
-* Cuda 12.1
+* Cuda 11.8/12.1
 * Conda
 * A C++14 capable compiler
   * __Linux:__ GCC/G++ 8 or higher
@@ -15,10 +15,10 @@ Learn more on our project page: [iHuman](https://pramishp.github.io/iHuman/index
 First make sure all the Prerequisites are installed in your operating system. Then, invoke
 
 ```bash
-conda env create -f environment.yml
+conda env create -f environment-cuda12_1.yml # or environment-cuda11_8.sh
 conda activate ihuman
 cd submodules
-bash ./install.sh
+bash ./install-cuda12_1.sh # or install-cuda11_8.sh
 ```
 
 ## Running the code
