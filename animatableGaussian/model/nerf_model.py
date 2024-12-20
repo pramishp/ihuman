@@ -18,7 +18,8 @@ from animatableGaussian.utils import ssim, l1_loss, GMoF, SavePly, save_image
 
 from diff_gaussian_rasterization import GaussianRasterizationSettings, GaussianRasterizer
 
-headless=True
+import yaml
+
 
 class EvaluatorRecon(nn.Module):
     """adapted from https://github.com/JanaldoChen/Anim-NeRF/blob/main/models/evaluator.py"""
@@ -89,7 +90,9 @@ class NeRFModel(pl.LightningModule):
         if not os.path.exists("test"):
             os.makedirs("test")
         self.robustifier = GMoF(rho=5)
-
+        with open('settings.yaml', "r") as f:
+            config = yaml.safe_load(f)
+        self.headless=config[0]['training']['headless']
         self.cal_test_metrics = opt.cal_test_metrics if 'cal_test_metrics' in opt else False
 
     def forward(self, camera_params, model_param, time, render_point=False, train=True):
@@ -506,7 +509,7 @@ class NeRFModel(pl.LightningModule):
         rasterized_rgbs = torch.stack(rasterized_rgbs)
         b_vertices = torch.stack(b_vertices)
         b_normals = torch.stack(b_normals)
-        if not headless:
+        if not self.headless:
             from animatableGaussian.vis_utils import create_side_by_side_images
             gt_rgb_vs_rasterized_rgb = create_side_by_side_images(gt_images=gt_images, pred_images=rasterized_rgbs)
 
@@ -573,7 +576,7 @@ class NeRFModel(pl.LightningModule):
         ## ========================================== ###
 
         # ==================== render model and image ===============
-        if not headless:
+        if not self.headless:
             from animatableGaussian.vis_utils import render_model_to_image
 
             model_image_overlaps = []
@@ -592,7 +595,7 @@ class NeRFModel(pl.LightningModule):
 
         # =====
         # model front side
-        if not headless:
+        if not self.headless:
             from animatableGaussian.vis_utils import render_model_front_n_side
             front_side_model_views = []
             for i, img_path in enumerate(batch['img_path']):
