@@ -1,5 +1,0 @@
----
-- training:
-    headless : False
-- inference:
-    create_mesh : False

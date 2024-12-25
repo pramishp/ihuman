@@ -90,9 +90,10 @@ class NeRFModel(pl.LightningModule):
         if not os.path.exists("test"):
             os.makedirs("test")
         self.robustifier = GMoF(rho=5)
-        with open('settings.yaml', "r") as f:
+        with open('../../confs/mmpeoplesnapshot_fine.yaml', "r") as f:
             config = yaml.safe_load(f)
-        self.headless=config[0]['training']['headless']
+        self.headless=config['training']['headless']
+        print(f"{self.headless=}")
         self.cal_test_metrics = opt.cal_test_metrics if 'cal_test_metrics' in opt else False
 
     def forward(self, camera_params, model_param, time, render_point=False, train=True):

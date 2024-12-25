@@ -13,9 +13,9 @@ from animatableGaussian.model.nerf_model import NeRFModel
 
 DEVICE = "cuda"
 import yaml
-with open('settings.yaml', "r") as f:
+with open('confs/mmpeoplesnapshot_fine.yaml', "r") as f:
     config = yaml.safe_load(f)
-create_mesh=config[0]['inference']['create_mesh']
+create_mesh=config['inference']['create_mesh']
 
 
 def load_mixamo_smpl(actions_dir, action_type='0007', skip=1):
