@@ -12,6 +12,10 @@ import pytorch3d.transforms as T
 from animatableGaussian.model.nerf_model import NeRFModel
 
 DEVICE = "cuda"
+import yaml
+with open('confs/mmpeoplesnapshot_fine.yaml', "r") as f:
+    config = yaml.safe_load(f)
+create_mesh=config['inference']['create_mesh']
 
 
 def load_mixamo_smpl(actions_dir, action_type='0007', skip=1):
@@ -104,16 +108,16 @@ def main(opt):
         image = rgb.detach().cpu().permute(1, 2, 0).numpy() * 255.0
         animations.append(image)
         cv2.imwrite(img_path, image[:, :, ::-1])
-
-        verts_posed = vt
-        pred_faces = model.model.faces[0]
-        vertex_colors = model.model.get_vertex_colors()
-        mesh_o3d = too3dmesh(verts_posed, pred_faces, vertex_colors)
-        os.makedirs(f"{output_path}/mesh", exist_ok=True)
-        o3d.io.write_triangle_mesh(f"{output_path}/mesh/{idx}.obj", mesh_o3d)
+        if create_mesh:
+            verts_posed = vt
+            pred_faces = model.model.faces[0]
+            vertex_colors = model.model.get_vertex_colors()
+            mesh_o3d = too3dmesh(verts_posed, pred_faces, vertex_colors)
+            os.makedirs(f"{output_path}/mesh", exist_ok=True)
+            o3d.io.write_triangle_mesh(f"{output_path}/mesh/{idx}.obj", mesh_o3d)
     
     animations = [np.asarray(animation, dtype=np.uint8) for animation in animations]   
-    imageio.mimsave(f"{output_path}/training.gif", animations)
+    imageio.mimsave(f"{output_path}/training.gif", animations,fps=50)
 
 
 if __name__ == "__main__":

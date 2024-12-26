@@ -3,7 +3,7 @@ conda install -c iopath iopath
 pip install "git+https://github.com/facebookresearch/pytorch3d.git"
 
 cd submodules
-git clone https://github.com/ashawkey/diff-gaussian-rasterization
+git clone https://github.com/ashawkey/diff-gaussian-rasterization --recursive
 cd ..
 pip install ./submodules/diff-gaussian-rasterization
 pip install ./submodules/simple-knn

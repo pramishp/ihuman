@@ -5,7 +5,10 @@ defaults:
 #  - dataset: peoplesnapshot/female-4-casual
 #  - dataset: peoplesnapshot/female-3-casual
   - deformer: mm_triangle_model
-
+training:
+  headless : True
+inference:
+  create_mesh : False
 hydra:
   job:
     chdir: true

@@ -6,7 +6,7 @@ Learn more on our project page: [iHuman](https://pramishp.github.io/iHuman/index
 
 ## Prerequisites
 
-* Cuda 11.8
+* Cuda 11.8/12.1
 * Conda
 * A C++14 capable compiler
   * __Linux:__ GCC/G++ 8 or higher
@@ -15,10 +15,10 @@ Learn more on our project page: [iHuman](https://pramishp.github.io/iHuman/index
 First make sure all the Prerequisites are installed in your operating system. Then, invoke
 
 ```bash
-conda env create -f environment.yml
+conda env create -f environment-cuda12_1.yml # or environment-cuda11_8.sh
 conda activate ihuman
 cd submodules
-bash ./install.sh
+bash ./install-cuda12_1.sh # or install-cuda11_8.sh
 ```
 
 ## Running the code
@@ -26,18 +26,17 @@ bash ./install.sh
 ### Step 1: Download Dataset
 a. download dataset from this link https://drive.google.com/file/d/1qwM1jdabiJFmEGywuYowKD0-nC2-rWVe/view?usp=share_link
 <br>
-b. place it in {root}/data/people_snapshot/
+b. place it in {root}/data/peoplesnapshot/
 
 ### Step 2: Download Models
-a. Download the SMPL v1.1 `SMPL_python_v.1.1.0.zip` model from the [SMPL official website](https://smpl.is.tue.mpg.de/download.php) and move and rename `SMPL_python_v.1.1.0/smpl/models/*.pkl` to `PROJECT_ROOT/data/smplx_models/smpl/`.
+a. Download the SMPL v1.1 `SMPL_python_v.1.1.0.zip` model from the [SMPL official website](https://smpl.is.tue.mpg.de/download.php) and move and rename `SMPL_python_v.1.1.0/smpl/models/*.pkl` to `PROJECT_ROOT/data/smpl/models`.
 
 After this the project folder should look like this:
 ```
-PROJECT_ROOT/data/smpl_model
+PROJECT_ROOT/data/smpl/models
     ├── SMPL_FEMALE.pkl
     ├── SMPL_MALE.pkl
     ├── SMPL_NEUTRAL.pkl
-
 
 ```
 
