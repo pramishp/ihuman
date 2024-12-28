@@ -15,7 +15,7 @@ Learn more on our project page: [iHuman](https://pramishp.github.io/iHuman/index
 First make sure all the Prerequisites are installed in your operating system. Then, invoke
 
 ```bash
-conda env create -f environment-cuda12_1.yml # or environment-cuda11_8.sh
+conda env create -f environment-cuda12_1.yaml # or environment-cuda11_8.sh
 conda activate ihuman
 cd submodules
 bash ./install-cuda12_1.sh # or install-cuda11_8.sh
