@@ -1,4 +1,6 @@
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1tbj4By3B1bUpWdQ-WPbynd733d13bjR8?usp=sharing)
 # iHuman: Instant Animatable Digital Humans From Monocular Videos [ECCV 2024]
+
 
 This is official implementation of the paper: "iHuman: Instant Animatable Digital Humans From Monocular Videos".
 
