@@ -4,7 +4,7 @@ import torch
 import pytorch_lightning as pl
 import pytorch_lightning.loggers as pl_loggers
 
-@hydra.main(config_path="./confs", config_name="mmpeoplesnapshot_fine", version_base="1.1")
+@hydra.main(config_path="/content/ihuman/confs", config_name="mmpeoplesnapshot_fine", version_base="1.1")
 def main(opt):
     pl.seed_everything(0)
     optimize_pose = opt.optimize_pose
